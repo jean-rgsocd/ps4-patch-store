@@ -7,24 +7,23 @@ async function fazerLogin() {
     const telefone = document.getElementById('telefone').value;
     const senha = document.getElementById('senha').value;
 
-    if (!telefone || !senha) { alert('Preencha o telefone e a senha!'); return; }
-
     try {
-        const response = await fetch(API_URL, {
+        const resposta = await fetch('/api/login', {  // <-- TEM DE SER /api/login (relativo)
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ telefone, senha })
         });
-        const data = await response.json();
 
-        if (response.ok) {
-            dadosAtuais = data; 
+        const dados = await resposta.json();
+
+        if (resposta.ok) {
+            // Esconde login e mostra a home do PS4
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('home-screen').classList.remove('hidden');
         } else {
-            alert(data.error || 'Erro ao realizar login.');
+            alert(dados.mensagem || 'Erro ao fazer login.');
         }
-    } catch (e) {
+    } catch (erro) {
         alert('Não foi possível conectar ao servidor da API.');
     }
 }
