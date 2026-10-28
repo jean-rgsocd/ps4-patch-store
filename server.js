@@ -86,7 +86,7 @@ app.post('/api/login', async (req, res) => {
             message: 'Login bem-sucedido!',
             links: {
                 infinity: {
-                    base: 'https://seu-link-r2.dev/BASE-INFINITY.pkg',
+                    base: 'https://pub-c6518eb1477949a58d959f5a769703d1.r2.dev/BASE%20MEGA%20PATCH%20INFINITY%202026.pkg',
                     patch: 'https://seu-link-r2.dev/PATCH-INFINITY.pkg'
                 },
                 legends: {
