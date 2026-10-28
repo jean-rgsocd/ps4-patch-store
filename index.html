@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PES Patchs Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- TELA DE LOGIN -->
+    <div class="ps4-container" id="login-screen">
+        <div class="store-brand">
+            <h1>PES PATCHS</h1>
+        </div>
+        <div class="login-box-ps4">
+            <input type="text" id="telefone" placeholder="Número de Telefone" autocomplete="off" inputmode="numeric" />
+            <input type="password" id="senha" placeholder="Senha" inputmode="text" />
+            <button class="btn-ps4-primary" onclick="fazerLogin()">ENTRAR</button>
+        </div>
+    </div>
+
+    <!-- TELA PRINCIPAL (GRADE DE JOGOS) -->
+    <div class="ps4-store-home hidden" id="home-screen">
+        <header class="ps4-header">
+            <div class="header-title">
+                <h2>CENTRAL DE JOGOS & PATCHES</h2>
+                <span>Selecione a versão desejada para gerenciar</span>
+            </div>
+            <button class="btn-ps4-secondary" onclick="sair()">Sair</button>
+        </header>
+
+        <div class="games-grid">
+            <div class="game-card" onclick="abrirDetalhes('infinity')">
+                <div class="game-cover-box">
+                    <img src="infinity.png" alt="Mega Patch Infinity" class="card-img">
+                    <span class="badge-ps4">PS4</span>
+                </div>
+                <div class="game-info-card">
+                    <h3>Mega Patch Infinity</h3>
+                    <p>Atualização Geral 2026</p>
+                </div>
+            </div>
+
+            <div class="game-card" onclick="abrirDetalhes('legends')">
+                <div class="game-cover-box">
+                    <img src="legends.png" alt="Mega Patch Legends" class="card-img">
+                    <span class="badge-ps4">PS4</span>
+                </div>
+                <div class="game-info-card">
+                    <h3>Mega Patch Legends</h3>
+                    <p>Versão v3.0 (Clássicos)</p>
+                </div>
+            </div>
+
+            <div class="game-card" onclick="abrirDetalhes('worldcup')">
+                <div class="game-cover-box">
+                    <img src="worldcup.png" alt="World Cup Edition" class="card-img">
+                    <span class="badge-ps4">PS4</span>
+                </div>
+                <div class="game-info-card">
+                    <h3>World Cup Edition</h3>
+                    <p>Edição Copa do Mundo</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA DE DETALHES E DOWNLOAD -->
+    <div class="ps4-details-screen hidden" id="details-screen">
+        <button class="btn-voltar-ps4" onclick="voltarHome()">⬅ Voltar para a Loja</button>
+        
+        <div class="details-layout">
+            <div class="details-left">
+                <img id="active-game-cover" src="" alt="Capa do Jogo" class="big-cover-img">
+                <div class="cusa-badge-box">
+                    <span id="txt-cusa"></span>
+                    <span class="region-tag">REGIONAL BR/USA</span>
+                </div>
+            </div>
+            <div class="details-right">
+                <h1 id="detalhe-titulo"></h1>
+                <p id="detalhe-desc" class="desc-text">Selecione abaixo o arquivo correspondente para realizar o download direto para o sistema do console.</p>
+                
+                <div class="download-selector-list">
+                    <div class="dl-row" onclick="selecionarAlvo('base')" id="row-base">
+                        <div class="dl-info">
+                            <span class="dl-type">BAIXAR BASE DO JOGO</span>
+                            <span class="dl-size">Arquivo Base de Instalação (PKG)</span>
+                        </div>
+                        <div class="dl-radio" id="radio-base"></div>
+                    </div>
+                    <div class="dl-row active-dl" onclick="selecionarAlvo('patch')" id="row-patch">
+                        <div class="dl-info">
+                            <span class="dl-type">BAIXAR PATCH DE ATUALIZAÇÃO</span>
+                            <span class="dl-size">Pacote de Mods Atualizado</span>
+                        </div>
+                        <div class="dl-radio selected" id="radio-patch"></div>
+                    </div>
+                </div>
+
+                <button class="btn-ps4-primary" style="margin-top: 25px;" onclick="iniciarDownloadDireto()">INICIAR DOWNLOAD NO PS4</button>
+                <p id="progresso-status" class="status-msg"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
