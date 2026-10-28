@@ -8,7 +8,7 @@ async function fazerLogin() {
     const senha = document.getElementById('senha').value;
 
     try {
-        const resposta = await fetch('/api/login', {  // <-- Caminho relativo correto
+        const resposta = await fetch('/api/login', { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ telefone, senha })
@@ -17,10 +17,11 @@ async function fazerLogin() {
         const dados = await resposta.json();
 
         if (resposta.ok) {
+            dadosAtuais = dados; // <--- AQUI ESTAVA A FALTAR! Guarda os links globais
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('home-screen').classList.remove('hidden');
         } else {
-            alert(dados.mensagem || 'Erro ao fazer login.');
+            alert(dados.mensagem || dados.error || 'Erro ao fazer login.');
         }
     } catch (erro) {
         alert('Não foi possível conectar ao servidor da API.');
