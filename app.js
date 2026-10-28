@@ -8,7 +8,7 @@ async function fazerLogin() {
     const senha = document.getElementById('senha').value;
 
     try {
-        const resposta = await fetch('/api/login', {  // <-- TEM DE SER /api/login (relativo)
+        const resposta = await fetch('/api/login', {  // <-- Caminho relativo correto
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ telefone, senha })
@@ -17,7 +17,6 @@ async function fazerLogin() {
         const dados = await resposta.json();
 
         if (resposta.ok) {
-            // Esconde login e mostra a home do PS4
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('home-screen').classList.remove('hidden');
         } else {
