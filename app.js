@@ -89,15 +89,19 @@ function iniciarDownloadDireto() {
         return;
     }
     
-    document.getElementById('progresso-status').innerText = 'A iniciar transferência no console...';
+    document.getElementById('progresso-status').innerText = 'A enviar pacote para o gestor do PS4...';
     
-    // Cria um elemento de link dinâmico com atributo download para forçar a consola a puxar o ficheiro
-    const a = document.createElement('a');
-    a.href = linkFinal;
-    a.download = ''; // Força o comportamento de download nativo
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    // Cria um iframe invisível para forçar o navegador a descarregar o binário em segundo plano sem abrir o texto na tela
+    const iframeInvisivel = document.createElement('iframe');
+    iframeInvisivel.style.display = 'none';
+    iframeInvisivel.src = linkFinal;
+    document.body.appendChild(iframeInvisivel);
+
+    // Remove o iframe após alguns segundos para limpar a memória da consola
+    setTimeout(() => {
+        document.body.removeChild(iframeInvisivel);
+        document.getElementById('progresso-status').innerText = 'Download disparado! Verifique as notificações do PS4.';
+    }, 5000);
 }
 function sair() {
     document.getElementById('home-screen').classList.add('hidden');
