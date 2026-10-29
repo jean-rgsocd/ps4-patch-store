@@ -1,110 +1,73 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const cors = require('cors');
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+const http = require("node:http");
+const fs = require("node:fs");
+const path = require("node:path");
 
-app.use(express.static(__dirname));
+const ROOT = __dirname;
+const PORT = Number(process.env.PORT) || 3000;
 
-// String de conexão oficial do MongoDB Atlas
-const MONGO_URI = 'mongodb+srv://jeanrgsocd_db_user:jean12345@patchpes.dd9tn7z.mongodb.net/?retryWrites=true&w=majority&appName=patchpes';
+const MIME_TYPES = {
+  ".html": "text/html; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".svg": "image/svg+xml",
+  ".ico": "image/x-icon"
+};
 
-mongoose.connect(MONGO_URI)
-    .then(() => console.log('>> Conectado ao MongoDB Atlas com sucesso!'))
-    .catch(err => console.error('Erro ao conectar ao MongoDB:', err));
+const server = http.createServer((req, res) => {
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    res.writeHead(405, { "Content-Type": "text/plain; charset=utf-8", "Allow": "GET, HEAD" });
+    return res.end("Method Not Allowed");
+  }
 
-// Schema do Utilizador no MongoDB
-const userSchema = new mongoose.Schema({
-    telefone: { type: String, unique: true, required: true },
-    senha: { type: String, required: true },
-    ativo: { type: Number, default: 1 }
+  let pathname;
+
+  try {
+    pathname = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+  } catch {
+    res.writeHead(400);
+    return res.end("Bad Request");
+  }
+
+  if (pathname === "/") pathname = "/index.html";
+
+  const filePath = path.resolve(ROOT, "." + pathname);
+
+  if (!filePath.startsWith(ROOT + path.sep)) {
+    res.writeHead(403);
+    return res.end("Forbidden");
+  }
+
+  fs.stat(filePath, (statError, stats) => {
+    if (statError || !stats.isFile()) {
+      res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+      return res.end("Arquivo não encontrado");
+    }
+
+    const contentType = MIME_TYPES[path.extname(filePath).toLowerCase()] || "application/octet-stream";
+
+    res.writeHead(200, {
+      "Content-Type": contentType,
+      "Content-Length": stats.size,
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "public, max-age=300"
+    });
+
+    if (req.method === "HEAD") return res.end();
+
+    const stream = fs.createReadStream(filePath);
+    stream.on("error", () => {
+      if (!res.headersSent) res.writeHead(500);
+      res.end();
+    });
+    stream.pipe(res);
+  });
 });
 
-const User = mongoose.model('User', userSchema);
-
-// Regista o teu utilizador principal automaticamente se ainda não existir
-async function criarAdminInicial() {
-    try {
-        const meuTelefone = '11984970539';
-        const minhaSenhaPura = '123456'; // Podes alterar aqui para a tua senha da loja
-
-        const user = await User.findOne({ telefone: meuTelefone });
-        if (!user) {
-            const hashedPassword = await bcrypt.hash(minhaSenhaPura, 10);
-            await User.create({ telefone: meuTelefone, senha: hashedPassword });
-            console.log(`>> Utilizador principal criado com sucesso! Telefone: ${meuTelefone}`);
-        } else {
-            console.log('>> Utilizador principal já existe na base de dados.');
-        }
-    } catch (e) {
-        console.error('Erro ao criar utilizador inicial:', e);
-    }
-}
-criarAdminInicial();
-
-// Rota para CRIAR novos utilizadores na base de dados (para os teus clientes)
-app.post('/api/criar-usuario', async (req, res) => {
-    const { telefone, senha } = req.body;
-
-    try {
-        if (!telefone || !senha) {
-            return res.status(400).json({ error: 'Telefone e senha são obrigatórios.' });
-        }
-
-        const existe = await User.findOne({ telefone });
-        if (existe) {
-            return res.status(400).json({ error: 'Este número de telefone já está cadastrado.' });
-        }
-
-        const hashedPassword = await bcrypt.hash(senha, 10);
-        await User.create({ telefone, senha: hashedPassword, ativo: 1 });
-
-        res.json({ success: true, message: `Utilizador ${telefone} criado com sucesso no MongoDB!` });
-    } catch (e) {
-        console.error('Erro ao criar utilizador:', e);
-        res.status(500).json({ error: 'Erro no servidor ao criar utilizador.' });
-    }
-});
-
-// Rota de Login validando no MongoDB
-app.post('/api/login', async (req, res) => {
-    const { telefone, senha } = req.body;
-
-    try {
-        const user = await User.findOne({ telefone });
-        if (!user) return res.status(401).json({ error: 'Utilizador não encontrado.' });
-        if (user.ativo === 0) return res.status(403).json({ error: 'Assinatura inativa.' });
-
-        const senhaValidada = await bcrypt.compare(senha, user.senha);
-        if (!senhaValidada) return res.status(401).json({ error: 'Senha incorreta.' });
-
-        res.json({
-            success: true,
-            message: 'Login bem-sucedido!',
-            links: {
-                infinity: {
-                    base: 'https://pub-c6518eb1477949a58d959f5a769703d1.r2.dev/BASE%20MEGA%20PATCH%20INFINITY%202026.pkg',
-                    patch: 'https://pub-c6518eb1477949a58d959f5a769703d1.r2.dev/Mega%20Patch%20Infinity%209.5%202026.pkg'
-                },
-                legends: {
-                    base: 'https://pub-c6518eb1477949a58d959f5a769703d1.r2.dev/PES%202021%20LEGENDS%20CUSA11154.pkg',
-                    patch: 'https://seu-link-r2.dev/PATCH-LEGENDS.pkg'
-                },
-                worldcup: {
-                    base: 'https://seu-link-r2.dev/BASE-WORLDCUP.pkg',
-                    patch: 'https://seu-link-r2.dev/PATCH-WORLDCUP.pkg'
-                }
-            }
-        });
-    } catch (e) {
-        res.status(500).json({ error: 'Erro no servidor.' });
-    }
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`PS4 Patch Store disponível na porta ${PORT}`);
 });
