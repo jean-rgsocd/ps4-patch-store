@@ -7,23 +7,24 @@ async function fazerLogin() {
     const telefone = document.getElementById('telefone').value;
     const senha = document.getElementById('senha').value;
 
+    if (!telefone || !senha) { alert('Preencha o telefone e a senha!'); return; }
+
     try {
-        const resposta = await fetch('/api/login', { 
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ telefone, senha })
         });
+        const data = await response.json();
 
-        const dados = await resposta.json();
-
-        if (resposta.ok) {
-            dadosAtuais = dados; // <--- AQUI ESTAVA A FALTAR! Guarda os links globais
+        if (response.ok) {
+            dadosAtuais = data; 
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('home-screen').classList.remove('hidden');
         } else {
-            alert(dados.mensagem || dados.error || 'Erro ao fazer login.');
+            alert(data.error || 'Erro ao realizar login.');
         }
-    } catch (erro) {
+    } catch (e) {
         alert('Não foi possível conectar ao servidor da API.');
     }
 }
@@ -35,7 +36,6 @@ function abrirDetalhes(tipo) {
 
     const coverArt = document.getElementById('active-game-cover');
 
-    // Atribui o nome exato da capa correspondente em formato PNG
     if(tipo === 'infinity') {
         document.getElementById('detalhe-titulo').innerText = 'Mega Patch Infinity';
         document.getElementById('txt-cusa').innerText = 'CUSA99999';
@@ -76,7 +76,8 @@ function selecionarAlvo(tipo) {
     }
 }
 
-function iniciarDownloadDireto() {
+// Envio direto via API do GoldHEN RPI na porta 9090 da consola
+async function iniciarDownloadDireto() {
     if (!dadosAtuais || !dadosAtuais.links) {
         alert('Links de download não carregados.');
         return;
@@ -89,20 +90,49 @@ function iniciarDownloadDireto() {
         return;
     }
     
-    document.getElementById('progresso-status').innerText = 'A enviar pacote para o gestor do PS4...';
-    
-    // Cria um iframe invisível para forçar o navegador a descarregar o binário em segundo plano sem abrir o texto na tela
-    const iframeInvisivel = document.createElement('iframe');
-    iframeInvisivel.style.display = 'none';
-    iframeInvisivel.src = linkFinal;
-    document.body.appendChild(iframeInvisivel);
+    document.getElementById('progresso-status').innerText = 'A enviar comando para o instalador do PS4...';
 
-    // Remove o iframe após alguns segundos para limpar a memória da consola
-    setTimeout(() => {
-        document.body.removeChild(iframeInvisivel);
-        document.getElementById('progresso-status').innerText = 'Download disparado! Verifique as notificações do PS4.';
-    }, 5000);
+    // Obtém o IP atual do próprio PS4 onde a aplicação está a correr no browser
+    const ps4Ip = window.location.hostname || '127.0.0.1';
+    const rpiPort = 9090; // Porta padrão do Remote Package Installer do GoldHEN
+
+    const payloadRPI = {
+        type: 'install',
+        pkgs: [linkFinal]
+    };
+
+    try {
+        // Envia o pacote de forma assíncrona para o gestor interno da consola
+        const response = await fetch(`http://${ps4Ip}:${rpiPort}/api/pkg`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payloadRPI)
+        });
+
+        if (response.ok) {
+            document.getElementById('progresso-status').innerText = 'Sucesso! O download começou em segundo plano no PS4.';
+        } else {
+            // Plano de contingência caso o RPI direto precise de confirmação por rota web
+            dispararFallbackNativo(linkFinal);
+        }
+    } catch (error) {
+        // Se falhar a conexão local direta, usa o método de redirecionamento limpo
+        dispararFallbackNativo(linkFinal);
+    }
 }
+
+function dispararFallbackNativo(url) {
+    document.getElementById('progresso-status').innerText = 'A disparar gestor de pacotes do sistema...';
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = url;
+    document.body.appendChild(iframe);
+    setTimeout(() => {
+        document.body.removeChild(iframe);
+        document.getElementById('progresso-status').innerText = 'Verifique as notificações de transferência na consola.';
+    }, 4000);
+}
+
 function sair() {
     document.getElementById('home-screen').classList.add('hidden');
     document.getElementById('login-screen').classList.remove('hidden');
