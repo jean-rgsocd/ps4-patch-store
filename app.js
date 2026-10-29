@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/login'; 
+const API_URL = 'https://ps4-patch-store.onrender.com/api/login'; 
 let dadosAtuais = null;
 let patchSelecionado = 'infinity';
 let tipoAlvoSelecionado = 'patch';
