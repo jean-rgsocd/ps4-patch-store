@@ -1,109 +1,133 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PES Patchs Store</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d18">
+  <meta name="description" content="PS4 Patch Store — catálogo de patches e coleções de futebol para PS4.">
+  <title>PS4 Patch Store</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
 </head>
 <body>
-    <!-- TELA DE LOGIN -->
-    <div class="ps4-container" id="login-screen">
-        <div class="store-brand">
-            <h1>PES PATCHS</h1>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="PS4 Patch Store">
+      <span class="brand-icon">PS4</span>
+      <span>PATCH <strong>STORE</strong></span>
+    </a>
+    <span class="status"><span class="status-dot"></span> CATÁLOGO ONLINE</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">A SUA CENTRAL DE PATCHES</p>
+        <h1>SEU PS4.<br><span>SUA PAIXÃO.</span></h1>
+        <p class="hero-description">
+          Explore coleções e patches de futebol para PS4 em um só lugar.
+        </p>
+        <a class="primary-button" href="#catalogo">EXPLORAR CATÁLOGO <span>↓</span></a>
+      </div>
+      <div class="hero-label">
+        <span>FOOTBALL</span>
+        <span>MODS &amp; PATCHES</span>
+        <span>PS4 COLLECTION</span>
+      </div>
+    </section>
+
+    <section class="catalog section" id="catalogo">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">ENCONTRE SEU JOGO</p>
+          <h2>Nosso catálogo</h2>
         </div>
-        <div class="login-box-ps4">
-            <input type="text" id="telefone" placeholder="Número de Telefone" autocomplete="off" inputmode="numeric" />
-            <input type="password" id="senha" placeholder="Senha" inputmode="text" />
-            <button class="btn-ps4-primary" onclick="fazerLogin()">ENTRAR</button>
-        </div>
-    </div>
+        <span id="result-count" class="result-count">3 coleções</span>
+      </div>
 
-    <!-- TELA PRINCIPAL (GRADE DE JOGOS) -->
-    <div class="ps4-store-home hidden" id="home-screen">
-        <header class="ps4-header">
-            <div class="header-title">
-                <h2>CENTRAL DE JOGOS & PATCHES</h2>
-                <span>Selecione a versão desejada para gerenciar</span>
+      <div class="filters">
+        <label class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <input id="search" type="search" placeholder="Buscar jogo ou coleção..." autocomplete="off">
+        </label>
+        <select id="category" aria-label="Filtrar catálogo">
+          <option value="all">Todas as coleções</option>
+          <option value="patch">Patches</option>
+          <option value="collection">Coleções</option>
+          <option value="worldcup">Copa do Mundo</option>
+        </select>
+      </div>
+
+      <div class="game-grid" id="game-grid">
+        <article class="game-card" data-name="mega patch infinity pes 2021 futebol" data-category="patch">
+          <div class="cover-wrap">
+            <img class="cover" src="/infinity.png" alt="Capa Mega Patch Infinity" loading="lazy">
+            <span class="card-tag">PATCH</span>
+          </div>
+          <div class="card-content">
+            <p class="card-kicker">PES 2021 • PS4</p>
+            <h3>Mega Patch Infinity</h3>
+            <p class="card-description">Base e atualização do Mega Patch Infinity 2026.</p>
+            <div class="card-actions">
+              <a class="download-button" href="https://pub-c6518eb1477949a58d959f5a769703d1.r2.dev/BASE%20MEGA%20PATCH%20INFINITY%202026.pkg" target="_blank" rel="noopener noreferrer">BAIXAR BASE ↗</a>
+              <a class="secondary-button" href="https://pub-c6518eb1477949a58d959f5a769703d1.r2.dev/Mega%20Patch%20Infinity%209.5%202026.pkg" target="_blank" rel="noopener noreferrer">BAIXAR PATCH ↗</a>
             </div>
-            <button class="btn-ps4-secondary" onclick="sair()">Sair</button>
-        </header>
+          </div>
+        </article>
 
-        <div class="games-grid">
-            <div class="game-card" onclick="abrirDetalhes('infinity')">
-                <div class="game-cover-box">
-                    <img src="infinity.png" alt="Mega Patch Infinity" class="card-img">
-                    <span class="badge-ps4">PS4</span>
-                </div>
-                <div class="game-info-card">
-                    <h3>Mega Patch Infinity</h3>
-                    <p>Atualização Geral 2026</p>
-                </div>
+        <article class="game-card" data-name="the legends collection legends pes 2021" data-category="collection">
+          <div class="cover-wrap">
+            <img class="cover" src="/legends.png" alt="Capa The Legends Collection" loading="lazy">
+            <span class="card-tag">COLEÇÃO</span>
+          </div>
+          <div class="card-content">
+            <p class="card-kicker">PES 2021 • PS4</p>
+            <h3>The Legends Collection</h3>
+            <p class="card-description">Coleção Legends para PES 2021.</p>
+            <div class="card-actions">
+              <a class="download-button" href="https://pub-c6518eb1477949a58d959f5a769703d1.r2.dev/PES%202021%20LEGENDS%20CUSA11154.pkg" target="_blank" rel="noopener noreferrer">BAIXAR BASE ↗</a>
+              <button class="secondary-button unavailable" type="button" disabled>PATCH INDISPONÍVEL</button>
             </div>
+          </div>
+        </article>
 
-            <div class="game-card" onclick="abrirDetalhes('legends')">
-                <div class="game-cover-box">
-                    <img src="legends.png" alt="Mega Patch Legends" class="card-img">
-                    <span class="badge-ps4">PS4</span>
-                </div>
-                <div class="game-info-card">
-                    <h3>Mega Patch Legends</h3>
-                    <p>Versão v3.0 (Clássicos)</p>
-                </div>
+        <article class="game-card" data-name="world cup 2026 copa do mundo" data-category="worldcup">
+          <div class="cover-wrap">
+            <img class="cover" src="/worldcup.png" alt="Capa World Cup 2026" loading="lazy">
+            <span class="card-tag">COPA 2026</span>
+          </div>
+          <div class="card-content">
+            <p class="card-kicker">FUTEBOL • PS4</p>
+            <h3>World Cup 2026</h3>
+            <p class="card-description">Edição especial da Copa do Mundo 2026.</p>
+            <div class="card-actions">
+              <button class="secondary-button unavailable" type="button" disabled>DOWNLOAD NÃO CONFIGURADO</button>
             </div>
+          </div>
+        </article>
+      </div>
 
-            <div class="game-card" onclick="abrirDetalhes('worldcup')">
-                <div class="game-cover-box">
-                    <img src="worldcup.png" alt="World Cup Edition" class="card-img">
-                    <span class="badge-ps4">PS4</span>
-                </div>
-                <div class="game-info-card">
-                    <h3>World Cup Edition</h3>
-                    <p>Edição Copa do Mundo</p>
-                </div>
-            </div>
-        </div>
-    </div>
+      <div id="empty-state" class="empty-state" hidden>
+        Nenhuma coleção encontrada. Tente outro termo.
+      </div>
+    </section>
 
-    <!-- TELA DE DETALHES E DOWNLOAD -->
-    <div class="ps4-details-screen hidden" id="details-screen">
-        <button class="btn-voltar-ps4" onclick="voltarHome()">⬅ Voltar para a Loja</button>
-        
-        <div class="details-layout">
-            <div class="details-left">
-                <img id="active-game-cover" src="" alt="Capa do Jogo" class="big-cover-img">
-                <div class="cusa-badge-box">
-                    <span id="txt-cusa"></span>
-                    <span class="region-tag">REGIONAL BR/USA</span>
-                </div>
-            </div>
-            <div class="details-right">
-                <h1 id="detalhe-titulo"></h1>
-                <p id="detalhe-desc" class="desc-text">Selecione abaixo o arquivo correspondente para realizar o download direto para o sistema do console.</p>
-                
-                <div class="download-selector-list">
-                    <div class="dl-row" onclick="selecionarAlvo('base')" id="row-base">
-                        <div class="dl-info">
-                            <span class="dl-type">BAIXAR BASE DO JOGO</span>
-                            <span class="dl-size">Arquivo Base de Instalação (PKG)</span>
-                        </div>
-                        <div class="dl-radio" id="radio-base"></div>
-                    </div>
-                    <div class="dl-row active-dl" onclick="selecionarAlvo('patch')" id="row-patch">
-                        <div class="dl-info">
-                            <span class="dl-type">BAIXAR PATCH DE ATUALIZAÇÃO</span>
-                            <span class="dl-size">Pacote de Mods Atualizado</span>
-                        </div>
-                        <div class="dl-radio selected" id="radio-patch"></div>
-                    </div>
-                </div>
+    <section class="notice">
+      <div class="notice-icon">i</div>
+      <div>
+        <h3>Antes de baixar</h3>
+        <p>Confira a compatibilidade, a versão e os requisitos de cada arquivo. Os botões desativados indicam downloads ainda não configurados.</p>
+      </div>
+    </section>
+  </main>
 
-                <button class="btn-ps4-primary" style="margin-top: 25px;" onclick="iniciarDownloadDireto()">INICIAR DOWNLOAD NO PS4</button>
-                <p id="progresso-status" class="status-msg"></p>
-            </div>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
+  <footer class="footer">
+    <a class="brand footer-brand" href="/">
+      <span class="brand-icon">PS4</span>
+      <span>PATCH <strong>STORE</strong></span>
+    </a>
+    <p>PS4 Patch Store © <span id="year"></span></p>
+    <a href="#catalogo">Voltar ao catálogo ↑</a>
+  </footer>
 </body>
 </html>
