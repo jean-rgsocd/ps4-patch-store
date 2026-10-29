@@ -87,7 +87,7 @@ app.post('/api/login', async (req, res) => {
             links: {
                 infinity: {
                     base: 'https://pub-c6518eb1477949a58d959f5a769703d1.r2.dev/BASE%20MEGA%20PATCH%20INFINITY%202026.pkg',
-                    patch: 'https://seu-link-r2.dev/PATCH-INFINITY.pkg'
+                    patch: 'https://pub-c6518eb1477949a58d959f5a769703d1.r2.dev/Mega%20Patch%20Infinity%209.5%202026.pkg'
                 },
                 legends: {
                     base: 'https://seu-link-r2.dev/BASE-LEGENDS.pkg',
