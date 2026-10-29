@@ -90,7 +90,7 @@ app.post('/api/login', async (req, res) => {
                     patch: 'https://pub-c6518eb1477949a58d959f5a769703d1.r2.dev/Mega%20Patch%20Infinity%209.5%202026.pkg'
                 },
                 legends: {
-                    base: 'https://seu-link-r2.dev/BASE-LEGENDS.pkg',
+                    base: 'https://pub-c6518eb1477949a58d959f5a769703d1.r2.dev/PES%202021%20LEGENDS%20CUSA11154.pkg',
                     patch: 'https://seu-link-r2.dev/PATCH-LEGENDS.pkg'
                 },
                 worldcup: {
