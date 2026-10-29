@@ -89,13 +89,16 @@ function iniciarDownloadDireto() {
         return;
     }
     
-    document.getElementById('progresso-status').innerText = 'Conectando ao servidor de arquivos...';
+    document.getElementById('progresso-status').innerText = 'A iniciar transferência no console...';
     
-    setTimeout(() => {
-        window.location.href = linkFinal;
-    }, 1000);
+    // Cria um elemento de link dinâmico com atributo download para forçar a consola a puxar o ficheiro
+    const a = document.createElement('a');
+    a.href = linkFinal;
+    a.download = ''; // Força o comportamento de download nativo
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
-
 function sair() {
     document.getElementById('home-screen').classList.add('hidden');
     document.getElementById('login-screen').classList.remove('hidden');
